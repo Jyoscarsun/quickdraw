@@ -88,16 +88,15 @@ module fc1_w(
     genvar bank;
     generate
         for(bank = 0; bank < NUM_BANKS; bank++)begin: memory_banks
-            //each abnk stores some weights
+            //each bank stores some weights
             (* ramstyle = "M10K" *)
             logic signed[7:0] mem_bank[0:WEIGHTS_PER_BANK-1];
 
             //initialize each bank with its portion of weights
             initial begin
-                //need to manuall split the file, again depend on NUM_BANKS parameter
+                //need to manually split the file, again depend on NUM_BANKS parameter
                 $readmemh($sformatf("parameters/fc1_w_bank%0d.mif", bank), mem_bank);
-                end
-            end
+            end // FIXED: Removed extra end here
         end
     endgenerate
 
