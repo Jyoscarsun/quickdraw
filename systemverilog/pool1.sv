@@ -74,9 +74,4 @@ module maxpool2d(
             DONE: next_state = IDLE;
         endcase
     end
-
-    // REMOVED: Combinational done assignment to avoid multiple drivers
-    // always_comb begin
-    //     done = (state == DONE);
-    // end
-endmodulef
+endmodule
