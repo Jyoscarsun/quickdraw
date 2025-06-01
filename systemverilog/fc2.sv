@@ -1,15 +1,15 @@
-module fc2{
+module fc2(
     input logic clk,
     input logic reset,
     input logic start,
     output logic done,
 
-    input logic signed[31:0] fc1[0:127], //input is output of fc1
+    input logic signed[31:0] fc1_output[0:127], //input is output of fc1
     input logic signed[7:0] weights[0:9][0:127], //10x128 weights
     input logic signed[31:0] biases[0:9], //10 biases
 
     output logic signed[31:0] fc_output[0:9] //10 neurons
-};
+);
     typedef enum logic [1:0] {IDLE, COMPUTING, DONE} state_t;
     state_t state, next_state;
 
@@ -38,7 +38,7 @@ module fc2{
                     
                     //process all 128 inputs in one cycle
                     for(int i=0; i < 128; i++)begin
-                        acc += fc1[i] * weights[ind][i];
+                        acc += fc1_output[i] * weights[ind][i];
                     end
 
                     fc_output[ind] <= acc;
