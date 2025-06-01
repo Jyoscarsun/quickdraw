@@ -1,8 +1,9 @@
-module filter_unit2_pipline(
-    input logic clk;
-    input logic reset;
-    input logic valid_in;
+module filter_unit2_pipeline(
+    input logic clk,
+    input logic reset,
+    input logic valid_in,
     output logic valid_out,
+
     input logic signed [31:0] window[0:15][0:2][0:2],
     input logic signed [7:0] w[0:15][0:2][0:2],
     input logic signed [31:0] b,
@@ -51,7 +52,7 @@ module filter_unit2_pipline(
     endgenerate
 
     // ReLU
-    always_ff @(posedge clk or psedge reset) begin
+    always_ff @(posedge clk or posedge reset) begin
         if(reset) begin
             result <= 0;
             valid_out <= 0;
@@ -70,8 +71,8 @@ module conv2(
     input logic start,
     output logic done,
 
-    input logic signed [7:0] weights[0:31][0:15][0:2][0:2].
-    inputs logic signed [31:0] biases[0:31],
+    input logic signed [7:0] weights[0:31][0:15][0:2][0:2],
+    input logic signed [31:0] biases[0:31],
 
     output logic signed [31:0] output_maps[0:31][0:13][0:13] //32 output feature maps of 14x14 with padding=1
 );
@@ -122,7 +123,7 @@ module conv2(
     );
 
     //state machine logic
-    always_ff @(posedge clk or psedge reset)begin
+    always_ff @(posedge clk or posedge reset)begin
         if(reset) begin
             state <= IDLE;
             {done, f, i, j, pipe_valid_in, wait_count} <= '0;
@@ -157,7 +158,7 @@ module conv2(
                     if(j < 13) begin
                         j<=j+1;
                     end else begin
-                        j <= 0
+                        j <= 0;
                         if(i<13) begin
                             i <= i+1;
                         end else begin
