@@ -70,6 +70,12 @@ module conv1(
             j <= 0;
         end else begin
             state <= next_state;
+
+            if (next_state == DONE && state != DONE) begin
+                d <= 1;  
+            end else if (next_state != DONE && state == DONE) begin
+                d <= 0;  
+            end
             
             if (state == COMPUTING) begin
                 // Store the result
@@ -108,11 +114,6 @@ module conv1(
                 next_state = IDLE;
             end
         endcase
-    end
-    
-    // Done signal
-    always_comb begin
-        d = (state == DONE);
     end
     
 endmodule
