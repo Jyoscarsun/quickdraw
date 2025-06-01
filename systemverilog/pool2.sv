@@ -19,10 +19,16 @@ module maxpool2d2(
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             state <= IDLE;
+            done <= 0;
             {done, f, i, j} <= '0;
         end else begin
             state <= next_state;
             
+            if (next_state == DONE && state != DONE)
+                done <= 1;  // Set when entering DONE state
+            else if (next_state != DONE && state == DONE)
+                done <= 0;  // Clear when leaving DONE state
+
             if (state == POOLING) begin
                 max_val = feature_maps[f][i*2][j*2]; // Assume top left is the maximum value
                 
@@ -62,8 +68,5 @@ module maxpool2d2(
             DONE: next_state = IDLE;
         endcase
     end
-    
-    always_comb begin
-        done = (state == DONE);
-    end
+
 endmodule
