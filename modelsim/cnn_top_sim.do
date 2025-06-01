@@ -40,12 +40,12 @@ add wave -position insertpoint sim:/cnn_top/state
 
 # add sample values from each layer's output
 add wave -divider "Layer Outputs (Sample Values)"
-add wave -position insertpoint sim:/cnn_top/input_image[14][14]
-add wave -position insertpoint sim:/cnn_top/conv1_output[0][12][12]
-add wave -position insertpoint sim:/cnn_top/pool1_output[0][6][6]
-add wave -position insertpoint sim:/cnn_top/conv2_output[0][6][6]
-add wave -position insertpoint sim:/cnn_top/pool2_output[0][3][3]
-add wave -position insertpoint sim:/cnn_top/fc1_output[0]
+add wave -position insertpoint {sim:/cnn_top/input_image[14][14]}
+add wave -position insertpoint {sim:/cnn_top/conv1_output[0][12][12]}
+add wave -position insertpoint {sim:/cnn_top/pool1_output[0][6][6]}
+add wave -position insertpoint {sim:/cnn_top/conv2_output[0][6][6]}
+add wave -position insertpoint {sim:/cnn_top/pool2_output[0][3][3]}
+add wave -position insertpoint {sim:/cnn_top/fc1_output[0]}
 add wave -position insertpoint -radix decimal sim:/cnn_top/fc2_output
 
 # create clock signal
