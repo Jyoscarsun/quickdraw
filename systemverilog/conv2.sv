@@ -94,14 +94,16 @@ module conv2(
 
     // implicit padding
     always_comb begin
+        // Declare variables at the beginning
+        int im, jn;
+        
         for(int c = 0; c < 16; c++) begin
             for(int m = 0; m < 3; m++) begin
                 for(int n = 0; n < 3; n++) begin
-                    //calculate input image coordinates with offset for padding
-                    int im=i+m-1;
-                    int jn=j+n-1;
+                    // Assign values separately from declaration
+                    im = i+m-1;
+                    jn = j+n-1;
 
-                    //use zero if outside valid region
                     if(im < 0 || im >= 14 || jn < 0 || jn >=14) 
                         cur_window[c][m][n]=0;
                     else
@@ -111,6 +113,7 @@ module conv2(
         end
     end
 
+    
     filter_unit2_pipeline fp(
         .clk(clk),
         .reset(reset),
