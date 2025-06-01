@@ -1,4 +1,4 @@
-module maxpool2d2(
+module pool2(
     input logic clk,
     input logic reset,
     input logic start,
