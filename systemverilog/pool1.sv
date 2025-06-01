@@ -4,7 +4,7 @@ module pool1(
     input logic start,
     output logic done,
 
-    input logic signed [31:0] feature_maps[0:15][0:27][0:27],
+    input logic signed [31:0] feature_maps[0:15][0:25][0:25],
     output logic signed [31:0] pooled_maps[0:15][0:13][0:13]
 );
     typedef enum logic [1:0] {IDLE, POOLING, DONE} state_t;
