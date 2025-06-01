@@ -68,11 +68,11 @@ set max_time 10000000
 set increment 1000
 set time 0
 
-while {$time < $max_time}{
+while {$time < $max_time} {
     run $increment
     set time [expr $time + $increment]
 
-    if {[examine -value sim:/cnn_top/done] == 1}{
+    if {[examine -value sim:/cnn_top/done] == 1} {
         break
     }
 }
