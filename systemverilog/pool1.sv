@@ -5,7 +5,7 @@ module maxpool2d(
     output logic done,
 
     input logic signed [31:0] feature_maps[0:15][0:27][0:27],
-    output logic signed [31:0] feature_maps[0:15][0:13][0:13]
+    output logic signed [31:0] pooled_maps[0:15][0:13][0:13]
 );
     typedef enum logic [1:0] {IDLE, POOLING, DONE} state_t;
     state_t state, next_state;
@@ -17,7 +17,7 @@ module maxpool2d(
     // Max value within maps
     logic signed [31:0] max_val;
 
-    always_ff(posedge clk or posedge reset)begin
+    always_ff @(posedge clk or posedge reset) begin  
         if(reset) begin
             state <= IDLE;
             done <= 0;
@@ -25,6 +25,12 @@ module maxpool2d(
         end
         else begin
             state <= next_state;
+
+            // Set done signal in sequential block only
+            if (next_state == DONE && state != DONE)
+                done <= 1;
+            else if (next_state != DONE && state == DONE)
+                done <= 0;
 
             if(state == POOLING) begin
                 // Find the maximum of the 2x2 window
@@ -64,12 +70,13 @@ module maxpool2d(
         
         case(state)
             IDLE: if(start) next_state = POOLING;
-            POOLING: if(f==15 && i == 13 & j == 13) next_state = DONE;
+            POOLING: if(f==15 && i == 13 && j == 13) next_state = DONE;
             DONE: next_state = IDLE;
         endcase
     end
 
-    always_comb begin
-        done = (state == DONE);
-    end
-endmodule
+    // REMOVED: Combinational done assignment to avoid multiple drivers
+    // always_comb begin
+    //     done = (state == DONE);
+    // end
+endmodulef
