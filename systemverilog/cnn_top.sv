@@ -109,7 +109,7 @@ module cnn_top(
         .fc_output(fc2_output)
     );
 
-    typedef enum logic [2:0] {IDLE, CONV1_EXEC, POOL1_EXEC, CONV2_EXEC, 
+    typedef enum logic [3:0] {IDLE, CONV1_EXEC, POOL1_EXEC, CONV2_EXEC, 
                              POOL2_EXEC, FC1_EXEC, FC2_EXEC, FIND_CLASS, FINISHED} state_t;
     state_t state, next_state;
     
