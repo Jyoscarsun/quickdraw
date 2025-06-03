@@ -7,7 +7,7 @@ module pool1(
     input logic signed [31:0] feature_maps[0:15][0:25][0:25],
     output logic signed [31:0] pooled_maps[0:15][0:13][0:13]
 );
-    typedef enum logic [1:0] {IDLE, POOLING, DONE} state_t;
+    typedef enum logic [1:0] {IDLE, POOLING, DONE, WAIT_START_LOW} state_t;
     state_t state, next_state;
 
     // Counters for feature maps
@@ -71,7 +71,9 @@ module pool1(
         case(state)
             IDLE: if(start) next_state = POOLING;
             POOLING: if(f==15 && i == 13 && j == 13) next_state = DONE;
-            DONE: next_state = IDLE;
+            DONE: next_state = WAIT_START_LOW;
+            WAIT_START_LOW: if(!start) next_state = IDLE; 
         endcase
     end
+
 endmodule
