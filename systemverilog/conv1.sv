@@ -30,7 +30,7 @@ module conv1(
     output logic signed[31:0] output_map[0:15][0:25][0:25] //16 outputs, 26x26
 );
     // Define state machine for control
-    typedef enum logic [1:0] {IDLE, COMPUTING, DONE} state_t;
+    typedef enum logic [1:0] {IDLE, COMPUTING, DONE, WAIT_TRIGGER_LOW} state_t;
     state_t state, next_state;
     
     // Registers for tracking progress
@@ -111,7 +111,10 @@ module conv1(
                 end
             end
             DONE: begin
-                next_state = IDLE;
+                next_state = WAIT_TRIGGER_LOW; //don't go back to IDLE yet
+            end
+            WAIT_TRIGGER_LOW: begin
+                if (!t) next_state = IDLE; 
             end
         endcase
     end
