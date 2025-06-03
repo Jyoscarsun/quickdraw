@@ -77,7 +77,7 @@ module conv2(
     output logic signed [31:0] output_maps[0:31][0:13][0:13] //32 output feature maps of 14x14 with padding=1
 );
     // state machine
-    typedef enum logic [2:0] {IDLE, SETUP, COMPUTE, WAIT_PIPE, NEXT_PIXEL, DONE} state_t;
+    typedef enum logic [2:0] {IDLE, SETUP, COMPUTE, WAIT_PIPE, NEXT_PIXEL, DONE, WAIT_START_LOW} state_t;
     state_t state, next_state;
 
     // Counters to track progress
@@ -205,7 +205,11 @@ module conv2(
                     next_state = SETUP;
             
             DONE:
-                next_state = IDLE;
+                next_state = WAIT_START_LOW;
+
+            WAIT_START_LOW: begin
+                if(!start) next_state = IDLE; // only go to IDLE when start is low
+            end
         endcase
     end
 endmodule
