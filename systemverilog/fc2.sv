@@ -10,7 +10,7 @@ module fc2(
 
     output logic signed[31:0] fc_output[0:9] //10 neurons
 );
-    typedef enum logic [1:0] {IDLE, COMPUTING, DONE} state_t;
+    typedef enum logic [1:0] {IDLE, COMPUTING, DONE, WAIT_START_LOW} state_t;
     state_t state, next_state;
 
     logic [3:0] ind; //index of the current neuron being processed
@@ -63,7 +63,10 @@ module fc2(
                 if(ind == 9) next_state = DONE;
 
             DONE:
-                next_state = IDLE; 
+                next_state = WAIT_START_LOW;
+
+            WAIT_START_LOW:
+                if(!start) next_state = IDLE; 
         endcase
     end
 endmodule
