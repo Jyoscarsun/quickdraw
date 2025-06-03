@@ -35,6 +35,14 @@ add wave -position insertpoint sim:/cnn_top/fc1_done
 add wave -position insertpoint sim:/cnn_top/fc2_start
 add wave -position insertpoint sim:/cnn_top/fc2_done
 
+# for conv1 signal debug
+# Add these signals to help debug
+add wave -position insertpoint sim:/cnn_top/conv1_layer/state
+add wave -position insertpoint sim:/cnn_top/conv1_layer/next_state
+add wave -position insertpoint sim:/cnn_top/conv1_layer/f
+add wave -position insertpoint sim:/cnn_top/conv1_layer/i
+add wave -position insertpoint sim:/cnn_top/conv1_layer/j
+
 # add state machine state
 add wave -position insertpoint sim:/cnn_top/state
 
