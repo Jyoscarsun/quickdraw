@@ -11,7 +11,7 @@ module fc1(
 
     output logic signed [31:0] fc_output[0:127] //128 output neurons
 );
-    typedef enum logic [2:0] {IDLE, INIT_NEURON, PROCESS_CHUNK, APPLY_RELU, NEXT_NEURON, DONE} state_t;
+    typedef enum logic [3:0] {IDLE, INIT_NEURON, PROCESS_CHUNK, APPLY_RELU, NEXT_NEURON, DONE, WAIT_START_LOW} state_t;
     state_t state, next_state;
 
     logic [6:0] neuron_idx;           // Current output neuron (0-127) 
@@ -108,7 +108,10 @@ module fc1(
                     next_state = INIT_NEURON;
             
             DONE: 
-                next_state = IDLE;
+                next_state = WAIT_START_LOW;
+
+            WAIT_START_LOW:
+                if(!start) next_state = IDLE;
         endcase
     end
 endmodule
