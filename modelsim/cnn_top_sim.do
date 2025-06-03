@@ -57,7 +57,7 @@ add wave -position insertpoint {sim:/cnn_top/fc1_output[0]}
 add wave -position insertpoint -radix decimal sim:/cnn_top/fc2_output
 
 # create clock signal
-force -deposit sim:/cnn_top/clk 0 0, 1 10ns -repeat 20ns
+force -deposit sim:/cnn_top/clk 0 0, 1 0.1ns -repeat 0.2ns
 
 # intialize with reset
 force -deposit sim:/cnn_top/reset 1 0
