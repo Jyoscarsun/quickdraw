@@ -1,7 +1,7 @@
 module image_loader(
     input logic clk,
     input logic reset,
-    output logic signed [7:0] output_image [0:27][0:27], // 28x28 image
+    output logic signed [7:0] image [0:27][0:27], // 28x28 image
     output logic image_loaded
 );
     // Memory to store image data
@@ -23,10 +23,9 @@ module image_loader(
             image_loaded <= 0;
             init_done <= 0;
         end else if (!init_done) begin
-            // Map 1D memory to 2D output in one shot
             for (int i = 0; i < 28; i++) begin
                 for (int j = 0; j < 28; j++) begin
-                    output_image[i][j] <= memory[i*28 + j];
+                    image[i][j] <= memory[i*28 + j];
                 end
             end
             image_loaded <= 1;
