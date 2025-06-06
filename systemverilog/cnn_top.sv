@@ -30,8 +30,12 @@ module cnn_top(
     logic signed [7:0] fc2_weights[0:9][0:127];
     logic signed [31:0] fc2_biases[0:9]; 
 
+    logic image_loaded;
     image_loader img_load(
-        .image(input_image)
+        .image(input_image),
+        .clk(clk),
+        .reset(reset),
+        .image_loaded(image_loaded)
     );
 
     //sv finds module by name, as long as in modelsim have file in command
@@ -171,7 +175,7 @@ module cnn_top(
         
         case (state)
             IDLE: 
-                if (start) next_state = CONV1_EXEC;
+                if (start && image_loaded) next_state = CONV1_EXEC;
                 
             CONV1_EXEC: 
                 if (conv1_done) next_state = POOL1_EXEC;
