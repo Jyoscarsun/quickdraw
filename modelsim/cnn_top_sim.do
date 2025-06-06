@@ -57,7 +57,7 @@ add wave -position insertpoint {sim:/cnn_top/fc1_output[0]}
 add wave -position insertpoint -radix decimal sim:/cnn_top/fc2_output
 
 # create clock signal
-force -deposit sim:/cnn_top/clk 0 0, 1 10ns -repeat 20ns
+force -deposit sim:/cnn_top/clk 0 0, 1 0.1ns -repeat 0.2ns
 force -deposit {sim:/cnn_top/input_image[0][0]} 8'h7F
 force -deposit {sim:/cnn_top/input_image[1][1]} 8'h3F
 
