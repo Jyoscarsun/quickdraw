@@ -57,7 +57,9 @@ add wave -position insertpoint {sim:/cnn_top/fc1_output[0]}
 add wave -position insertpoint -radix decimal sim:/cnn_top/fc2_output
 
 # create clock signal
-force -deposit sim:/cnn_top/clk 0 0, 1 0.1ns -repeat 0.2ns
+force -deposit sim:/cnn_top/clk 0 0, 1 10ns -repeat 20ns
+force -deposit {sim:/cnn_top/input_image[0][0]} 8'h7F
+force -deposit {sim:/cnn_top/input_image[1][1]} 8'h3F
 
 # intialize with reset
 force -deposit sim:/cnn_top/reset 1 0
@@ -75,6 +77,48 @@ force -deposit sim:/cnn_top/start 0 0
 set max_time 10000000
 set increment 1000
 set time 0
+
+# Add checkpoint display statements at each state transition
+when {sim:/cnn_top/state == "CONV1_EXEC"} {
+    echo "Starting CONV1 execution"
+}
+when {sim:/cnn_top/conv1_done == 1} {
+    echo "CONV1 completed - Sample output value: [examine -decimal {sim:/cnn_top/conv1_output[0][0][0]}]"
+}
+when {sim:/cnn_top/state == "POOL1_EXEC"} {
+    echo "Starting POOL1 execution"
+}
+when {sim:/cnn_top/pool1_done == 1} {
+    echo "POOL1 completed - Sample output value: [examine -decimal {sim:/cnn_top/pool1_output[0][0][0]}]"
+}
+when {sim:/cnn_top/state == "CONV2_EXEC"} {
+    echo "Starting CONV2 execution"
+}
+when {sim:/cnn_top/conv2_done == 1} {
+    echo "CONV2 completed - Sample output value: [examine -decimal {sim:/cnn_top/conv2_output[0][0][0]}]"
+}
+when {sim:/cnn_top/state == "POOL2_EXEC"} {
+    echo "Starting POOL2 execution"
+}
+when {sim:/cnn_top/pool2_done == 1} {
+    echo "POOL2 completed - Sample output value: [examine -decimal {sim:/cnn_top/pool2_output[0][0][0]}]"
+}
+when {sim:/cnn_top/state == "FC1_EXEC"} {
+    echo "Starting FC1 execution"
+}
+when {sim:/cnn_top/fc1_done == 1} {
+    echo "FC1 completed - Sample output value: [examine -decimal {sim:/cnn_top/fc1_output[0]}]"
+}
+when {sim:/cnn_top/state == "FC2_EXEC"} {
+    echo "Starting FC2 execution"
+}
+when {sim:/cnn_top/fc2_done == 1} {
+    echo "FC2 completed - Sample output values:"
+    for {set i 0} {$i < 10} {incr i} {
+        set value [examine -decimal -value sim:/cnn_top/fc2_output\[$i\]]
+        echo "  Class $i: $value"
+    }
+}
 
 while {$time < $max_time} {
     run $increment
@@ -94,6 +138,7 @@ echo "Predicted class: [examine -decimal -value sim:/cnn_top/predicted_class]"
 echo "-------------------------------------------"
 echo "Class probabilities (logits):"
 for {set i 0} {$i < 10} {incr i} {
-    echo "  Class $i: [examine -decimal -value sim:/cnn_top/fc2_output\[$i\]]"
+    set value [examine -decimal -value sim:/cnn_top/fc2_output\[$i\]]
+    echo "  Class $i: $value"
 }
 echo "-------------------------------------------"
