@@ -12,6 +12,7 @@ vlog -sv ../systemverilog/fc2.sv
 vlog -sv ../systemverilog/cnn_top.sv
 
 vsim -novopt work.cnn_top
+source visualize_image.tcl
 
 # Add basic control signals
 add wave -position insertpoint -radix unsigned sim:/cnn_top/clk
