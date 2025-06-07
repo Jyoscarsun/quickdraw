@@ -197,15 +197,17 @@ module conv2(
                 next_state = WAIT_PIPE;
 
             WAIT_PIPE: begin
-                if(pipe_valid_out || wait_count >= 30) begin
+                // IMPORTANT: Force advancement after timeout regardless of valid signal
+                if(wait_count >= 30) begin
+                    next_state = NEXT_PIXEL;
+                    if (!pipe_valid_out)
+                        $display("WARNING: Pipeline timeout at f=%0d, i=%0d, j=%0d", f, i, j);
+                end
+                else if(pipe_valid_out) begin
                     next_state = NEXT_PIXEL;
                 end
-                
-                if(wait_count >= 30 && !pipe_valid_out) begin
-                    $display("WARNING: Pipeline timeout at f=%0d, i=%0d, j=%0d", f, i, j);
-                end
             end
-
+            
             NEXT_PIXEL:
                 if(f==31 && i==13 && j==13)
                     next_state = DONE;
