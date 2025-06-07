@@ -208,11 +208,13 @@ module conv2(
                 end
             end
             
-            NEXT_PIXEL:
-                if(f==31 && i==13 && j==13)
+            NEXT_PIXEL: begin
+                if((f >= 31) && (i >= 13) && (j >= 13)) begin
                     next_state = DONE;
-                else 
+                    $display("CONV2: TRANSITIONING TO DONE STATE!");
+                end else 
                     next_state = SETUP;
+            end
             
             DONE:
                 next_state = WAIT_START_LOW;
