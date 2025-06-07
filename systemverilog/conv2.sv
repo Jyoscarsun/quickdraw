@@ -152,7 +152,7 @@ module conv2(
                     wait_count <= wait_count + 1;
                     // store result when it's valid
                     if(pipe_valid_out) begin
-                        output_maps[f][i][j] = pipe_result;
+                        output_maps[f][i][j] <= pipe_result;
                     end 
                 end
 
@@ -194,9 +194,20 @@ module conv2(
             COMPUTE:
                 next_state = WAIT_PIPE;
 
-            WAIT_PIPE:
-                //basically a timeout because normally filter_pipeline takes 17 cycles to finish
-                if(pipe_valid_out || wait_count >= 20) next_state = NEXT_PIXEL;
+            WAIT_PIPE: begin
+                wait_count <= wait_count + 1;
+                // Store result when it's valid
+                if(pipe_valid_out) begin
+                    output_maps[f][i][j] <= pipe_result;
+                    next_state = NEXT_PIXEL;  // Only proceed when we have valid data
+                end else if(wait_count >= 30) begin  // Increased timeout just to be safe
+                    // Emergency timeout - something went wrong, force a default value to avoid undefined results
+                    output_maps[f][i][j] <= 32'd0;  // Use 0 as default
+                    next_state = NEXT_PIXEL;
+
+                    $display("WARNING: Pipeline timeout at f=%0d, i=%0d, j=%0d", f, i, j);
+                end
+            end
 
             NEXT_PIXEL:
                 if(f==31 && i==13 && j==13)
