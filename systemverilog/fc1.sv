@@ -57,14 +57,22 @@ module fc1(
                     input_idx <= 0;
                 end
                 
+                // Replace the problematic PROCESS_CHUNK state with:
                 PROCESS_CHUNK: begin
-                    // Process CHUNK_SIZE inputs per cycle
+                    // Use a temporary variable for accumulation
+                    logic signed [31:0] temp_acc;
+                    temp_acc = acc;
+                    
+                    // Process CHUNK_SIZE inputs
                     for (int i = 0; i < CHUNK_SIZE; i++) begin
                         if (input_idx + i < 1568) begin
-                            acc <= acc + get_flattened_input(input_idx + i) * 
-                                         weights[neuron_idx][input_idx + i];
+                            temp_acc = temp_acc + get_flattened_input(input_idx + i) * 
+                                                weights[neuron_idx][input_idx + i];
                         end
                     end
+                    
+                    // Single update at the end
+                    acc <= temp_acc;
                     input_idx <= input_idx + CHUNK_SIZE;
                 end
                 
