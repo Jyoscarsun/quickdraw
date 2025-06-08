@@ -44,6 +44,29 @@ add wave -position insertpoint sim:/cnn_top/conv1_layer/f
 add wave -position insertpoint sim:/cnn_top/conv1_layer/i
 add wave -position insertpoint sim:/cnn_top/conv1_layer/j
 
+# for conv2 signal debug
+# Add these signals to help debug
+add wave -position insertpoint sim:/cnn_top/conv2_layer/state
+add wave -position insertpoint sim:/cnn_top/conv2_layer/next_state
+add wave -position insertpoint sim:/cnn_top/conv2_layer/f
+add wave -position insertpoint sim:/cnn_top/conv2_layer/i
+add wave -position insertpoint sim:/cnn_top/conv2_layer/j
+
+# Add important pipeline signals
+add wave -position insertpoint sim:/cnn_top/conv2_layer/pipe_valid_in
+add wave -position insertpoint sim:/cnn_top/conv2_layer/pipe_valid_out
+add wave -position insertpoint sim:/cnn_top/conv2_layer/wait_count
+add wave -position insertpoint sim:/cnn_top/conv2_layer/pipe_result
+
+# Add special debug trigger for state transitions
+when {sim:/cnn_top/conv2_layer/state == "NEXT_PIXEL" && sim:/cnn_top/conv2_layer/f == 31 && sim:/cnn_top/conv2_layer/i == 13 && sim:/cnn_top/conv2_layer/j == 13} {
+    echo "CONV2 CRITICAL POINT: Final coordinates reached (f=31, i=13, j=13)"
+}
+
+when {sim:/cnn_top/conv2_layer/state == "DONE"} {
+    echo "CONV2 DONE state reached!"
+}
+
 # add state machine state
 add wave -position insertpoint sim:/cnn_top/state
 
