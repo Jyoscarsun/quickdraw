@@ -1,5 +1,5 @@
 # Quickdraw Overview
-This repository contains the code for hardware-accelerated inference of CNN network using the Quickdraw dataset. The Quickdraw dataset contains 28x28 pixel images of hand-drawn images grouped by different categories. Ten categories were selected and trained on with a CNNN neural network. The weights are then exported onto a DE1-SOC board to perform inference on test images. 
+This repository contains the code for hardware-accelerated inference of CNN network using the Quickdraw dataset. The Quickdraw dataset contains 28x28 pixel images of hand-drawn images grouped by different categories. Ten categories were selected and trained on with a CNN neural network. The weights are then exported onto a DE1-SOC board to perform inference on test images. 
 
 ## Network Architecture
 One of the main consideration for the architecture design is the feasibility for hardware to load weights. To achieve a network that is both compact and accurate, I implemented two convolutional layers (with pooling following) and two fully connected layers. The dimensions of all layers can be found below. 
