@@ -46,16 +46,16 @@ One of the main consideration for the architecture design is the feasibility for
     end
    ```
 4. Hardware-Optimized Activation Functions: ReLU activation implemented directly in hardware
-  ```
-  // Hardware ReLU implementation
-  result <= (partial_sums[16] < 0) ? 0 : partial_sums[16];
-  ```
+      ```
+      // Hardware ReLU implementation
+      result <= (partial_sums[16] < 0) ? 0 : partial_sums[16];
+      ```
 5. Efficient Parameter Loading: weights and biases are efficiently loaded
-  * Parameter Loaders: Dedicated modules for weight/bias initialization
-  * Memory Mapping: Direct mapping from hex files to hardware structures
+    * Parameter Loaders: Dedicated modules for weight/bias initialization
+    * Memory Mapping: Direct mapping from hex files to hardware structures
 
 ## Performance Optimizations
-Multi-Channel Processing: Processes multiple input channels simultaneously
-Pipelined Execution: Overlaps computation across multiple pixels/filters
-State Machine Pipeline: Efficiently sequences layer operations
-Timeout Management: Ensures forward progress even with validation issues
+* Multi-Channel Processing: Processes multiple input channels simultaneously
+* Pipelined Execution: Overlaps computation across multiple pixels/filters
+* State Machine Pipeline: Efficiently sequences layer operations
+* Timeout Management: Ensures forward progress even with validation issues
