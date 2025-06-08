@@ -196,6 +196,7 @@ module conv2(
             COMPUTE:
                 next_state = WAIT_PIPE;
 
+            // Modify the WAIT_PIPE condition in always_comb
             WAIT_PIPE: begin
                 // IMPORTANT: Force advancement after timeout regardless of valid signal
                 if(wait_count >= 30) begin
@@ -207,15 +208,22 @@ module conv2(
                     next_state = NEXT_PIXEL;
                 end
             end
-            
+
             NEXT_PIXEL: begin
-                if((f >= 31) && (i >= 13) && (j >= 13)) begin
+                logic [3:0] next_j;
+                logic [3:0] next_i;
+                logic [4:0] next_f;
+
+                next_j = (j<13) ? (j+1) : 0;
+                next_i = (j<13) ? i : ((i<13) ? (i+1) : 0);
+                next_f = (j<13 || i<13) ? f: ((f<31) ? (f+1) : f);
+
+                if((next_f >= 31) && (next_i >= 13) && (next_j >= 13))
                     next_state = DONE;
-                    $display("CONV2: TRANSITIONING TO DONE STATE!");
-                end else 
+                else
                     next_state = SETUP;
             end
-            
+
             DONE:
                 next_state = WAIT_START_LOW;
 
