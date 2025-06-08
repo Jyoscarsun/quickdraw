@@ -3,13 +3,15 @@ This repository contains the code for hardware-accelerated inference of CNN netw
 
 ## Network Architecture
 One of the main consideration for the architecture design is the feasibility for hardware to load weights. To achieve a network that is both compact and accurate, I implemented two convolutional layers (with pooling following) and two fully connected layers. The dimensions of all layers can be found below. 
-* **Input**: 28×28 (784 features)
-* **Conv1**: 26×26 (16 channels)
-* **Pool1**: 13×13 (16 channels)
-* **Conv2**: 13×13 (32 channels, with padding)
-* **Pool2**: 7×7 (32 channels)
-* **FC1**: flattened to 1568 inputs
-* **FC2**: 10 outputs
+| Layer   | Description                                           | Output Dimension |
+|---------|-------------------------------------------------------|------------------|
+| Input   | 28×28 grayscale image                                 | 28×28×1          |
+| Conv1   | 16 3×3 filters, stride 1                              | 26×26×16         |
+| Pool1   | 2×2 max pooling                                       | 13×13×16         |
+| Conv2   | 32 3×3 filters (with 16 input channels)               | 14×14×32         |
+| Pool2   | 2×2 max pooling                                       | 7×7×32           |
+| FC1     | 128 neurons                                           | 128              |
+| FC2     | 10 output classes                                     | 10               |
 
 ## Hardware Implementation
 1. Parallelized Convolution Operations  
@@ -53,9 +55,24 @@ One of the main consideration for the architecture design is the feasibility for
 5. Efficient Parameter Loading: weights and biases are efficiently loaded
     * Parameter Loaders: Dedicated modules for weight/bias initialization
     * Memory Mapping: Direct mapping from hex files to hardware structures
+6. Parallel Processing Banks: a key acceleration technique used is parallel processing banks generated using SystemVerilog's genvar construct, which creates multiple identical hardware compute units
 
 ## Performance Optimizations
 * Multi-Channel Processing: Processes multiple input channels simultaneously
 * Pipelined Execution: Overlaps computation across multiple pixels/filters
 * State Machine Pipeline: Efficiently sequences layer operations
 * Timeout Management: Ensures forward progress even with validation issues
+
+## Testing and Verification
+The system includes a comprehensive testing framework:
+* ModelSim simulation scripts
+* Visualization tools for CNN internal states
+* Text-based image visualization
+* Detailed state monitoring
+
+## Future Enhancements
+* Enhanced parallelism with even wider pipelines
+* Tiled memory architecture for larger models
+* Quantization support for reduced precision operations
+
+This accelerator demonstrates the power of hardware-specific optimizations for neural network inference, achieving significant speedup compared to CPU implementations.
