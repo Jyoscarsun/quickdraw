@@ -2,10 +2,8 @@
 This repository contains the code for hardware-accelerated inference of CNN network using the Quickdraw dataset. The Quickdraw dataset contains 28x28 pixel images of hand-drawn images grouped by different categories. Ten categories were selected and trained on with a CNNN neural network. The weights are then exported onto a DE1-SOC board to perform inference on test images. 
 
 ## Network Architecture
-CNN network architecture
-The dimensions track correctly through your network:
-
-Input: 28×28
+One of the main consideration for the architecture design is the feasibility for hardware to load weights. Given the limitations, the network architecture is designed as below:
+Input: 28×28 
 Conv1: 26×26 (16 channels)
 Pool1: 13×13 (16 channels)
 Conv2: 13×13 (32 channels, with padding)
