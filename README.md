@@ -24,7 +24,7 @@ One of the main consideration for the architecture design is the feasibility for
           end
       end
       ```
-2. Advanced Pipelining
+2. Advanced Pipelining  
    The `filter_unit2_pipeline` module implements a deep pipeline architecture:
    * **16-Stage Pipeline**: Each input channel has its own pipeline stage
    * **Valid Signal Propagation**: Validity flags propagate through the pipeline
@@ -32,7 +32,6 @@ One of the main consideration for the architecture design is the feasibility for
 3. Implicit Padding
    Memory-efficient padding is implemented without additional storage:
    ```
-   // Efficient implicit padding in conv2
   always_comb begin
       for(int c = 0; c < 16; c++) begin
           for(int m = 0; m < 3; m++) begin
