@@ -12,7 +12,7 @@ One of the main consideration for the architecture design is the feasibility for
 * **FC2**: 10 outputs
 
 ## Hardware Implementation
-1. Parallelized Convolution Operations
+1. Parallelized Convolution Operations  
   The convolution layers implement parallel multiply-accumulate (MAC) operations:
   ```
   // Parallel channel computation in conv2
