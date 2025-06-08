@@ -14,16 +14,16 @@ One of the main consideration for the architecture design is the feasibility for
 ## Hardware Implementation
 1. Parallelized Convolution Operations  
   The convolution layers implement parallel multiply-accumulate (MAC) operations:
-  ```
-  // Parallel channel computation in conv2
-  for(i=0; i<16; i++) begin: channel_units
-      always_comb begin
-          channel_result = window[i][0][0] * w[i][0][0] + 
-                          window[i][0][1] * w[i][0][1] + 
-                          // ... other parallel multiplications
+      ```
+      // Parallel channel computation in conv2
+      for(i=0; i<16; i++) begin: channel_units
+          always_comb begin
+              channel_result = window[i][0][0] * w[i][0][0] + 
+                              window[i][0][1] * w[i][0][1] + 
+                              // ... other parallel multiplications
+          end
       end
-  end
-  ```
+      ```
 2. Advanced Pipelining
    The `filter_unit2_pipeline` module implements a deep pipeline architecture:
    * **16-Stage Pipeline**: Each input channel has its own pipeline stage
