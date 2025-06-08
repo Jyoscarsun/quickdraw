@@ -58,18 +58,6 @@ add wave -position insertpoint sim:/cnn_top/conv2_layer/pipe_valid_out
 add wave -position insertpoint sim:/cnn_top/conv2_layer/wait_count
 add wave -position insertpoint sim:/cnn_top/conv2_layer/pipe_result
 
-# Add special debug trigger for state transitions
-when {[examine -value sim:/cnn_top/conv2_layer/state] == "NEXT_PIXEL"} {
-    if {[examine -decimal -value sim:/cnn_top/conv2_layer/f] == 31 && 
-        [examine -decimal -value sim:/cnn_top/conv2_layer/i] == 13 && 
-        [examine -decimal -value sim:/cnn_top/conv2_layer/j] == 13} {
-        echo "CONV2 CRITICAL POINT: Final coordinates reached (f=31, i=13, j=13)"
-    }
-}
-
-when {[examine -value sim:/cnn_top/conv2_layer/state] == "DONE"} {
-    echo "CONV2 DONE state reached!"
-}
 
 # add state machine state
 add wave -position insertpoint sim:/cnn_top/state
@@ -85,7 +73,7 @@ add wave -position insertpoint {sim:/cnn_top/fc1_output[0]}
 add wave -position insertpoint -radix decimal sim:/cnn_top/fc2_output
 
 # create clock signal
-force -deposit sim:/cnn_top/clk 0 0, 1 0.1ns -repeat 0.2ns
+force -deposit sim:/cnn_top/clk 0 0, 1 0.05ns -repeat 0.1ns
 
 # intialize with reset
 force -deposit sim:/cnn_top/reset 1 0
@@ -100,7 +88,7 @@ run 20ns
 force -deposit sim:/cnn_top/start 0 0
 
 # run until done is asserted or timeout
-set max_time 10000000
+set max_time 100000000
 set increment 1000
 set time 0
 
