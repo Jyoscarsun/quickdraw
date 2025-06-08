@@ -32,18 +32,18 @@ One of the main consideration for the architecture design is the feasibility for
 3. Implicit Padding
    Memory-efficient padding is implemented without additional storage:
    ```
-  always_comb begin
-      for(int c = 0; c < 16; c++) begin
-          for(int m = 0; m < 3; m++) begin
-              for(int n = 0; n < 3; n++) begin
-                  if(im < 0 || im >= 14 || jn < 0 || jn >=14) 
-                      cur_window[c][m][n]=0;  // Zero padding
-                  else
-                      cur_window[c][m][n]=pool1_maps[c][im][jn];
-              end
-          end
-      end
-  end
+    always_comb begin
+        for(int c = 0; c < 16; c++) begin
+            for(int m = 0; m < 3; m++) begin
+                for(int n = 0; n < 3; n++) begin
+                    if(im < 0 || im >= 14 || jn < 0 || jn >=14) 
+                        cur_window[c][m][n]=0;  // Zero padding
+                    else
+                        cur_window[c][m][n]=pool1_maps[c][im][jn];
+                end
+            end
+        end
+    end
    ```
 4. Hardware-Optimized Activation Functions: ReLU activation implemented directly in hardware
   ```
