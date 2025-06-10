@@ -80,29 +80,6 @@ add wave -position insertpoint sim:/cnn_top/fc1_layer/neuron_idx
 add wave -position insertpoint sim:/cnn_top/fc1_layer/input_idx
 add wave -position insertpoint sim:/cnn_top/fc1_layer/acc
 
-# Add FC1 process monitoring
-when {[examine -value sim:/cnn_top/fc1_layer/state] == "IDLE" && [examine -value sim:/cnn_top/fc1_start] == 1} {
-    echo "FC1: Starting computation"
-}
-
-when {[examine -value sim:/cnn_top/fc1_layer/state] == "INIT_NEURON"} {
-    echo "FC1: Processing neuron [examine -decimal -value sim:/cnn_top/fc1_layer/neuron_idx]"
-}
-
-when {[examine -value sim:/cnn_top/fc1_layer/state] == "PROCESS_CHUNK" && 
-     [examine -decimal -value sim:/cnn_top/fc1_layer/input_idx] % 500 == 0} {
-    echo "FC1: Neuron [examine -decimal -value sim:/cnn_top/fc1_layer/neuron_idx] progress: [examine -decimal -value sim:/cnn_top/fc1_layer/input_idx]/1568 inputs processed"
-}
-
-when {[examine -value sim:/cnn_top/fc1_layer/state] == "STORE_RESULT"} {
-    echo "FC1: Completed neuron [examine -decimal -value sim:/cnn_top/fc1_layer/neuron_idx] with value: [examine -decimal -value sim:/cnn_top/fc1_layer/acc]"
-}
-
-when {[examine -value sim:/cnn_top/fc1_layer/state] == "DONE"} {
-    echo "FC1: All 128 neurons processed!"
-    echo "FC1: Sample output values: [examine -decimal -value sim:/cnn_top/fc1_output[0]], [examine -decimal -value sim:/cnn_top/fc1_output[1]], [examine -decimal -value sim:/cnn_top/fc1_output[2]]"
-}
-
 # add state machine state
 add wave -position insertpoint sim:/cnn_top/state
 
