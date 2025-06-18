@@ -57,23 +57,10 @@ module fc1(
                     input_idx <= 0;
                 end
                 
-                // Replace the problematic PROCESS_CHUNK state with:
                 PROCESS_CHUNK: begin
-                    // Use a temporary variable for accumulation
-                    logic signed [31:0] temp_acc;
-                    temp_acc = acc;
-                    
-                    // Process CHUNK_SIZE inputs
-                    for (int i = 0; i < CHUNK_SIZE; i++) begin
-                        if (input_idx + i < 1568) begin
-                            temp_acc = temp_acc + get_flattened_input(input_idx + i) * 
-                                                weights[neuron_idx][input_idx + i];
-                        end
-                    end
-                    
-                    // Single update at the end
-                    acc <= temp_acc;
-                    input_idx <= input_idx + CHUNK_SIZE;
+                    // Process just one input per cycle (more cycles but more reliable)
+                    acc <= acc + get_flattened_input(input_idx) * weights[neuron_idx][input_idx];
+                    input_idx <= input_idx + 1;
                 end
                 
                 APPLY_RELU: begin
@@ -104,7 +91,7 @@ module fc1(
                 next_state = PROCESS_CHUNK;
             
             PROCESS_CHUNK: 
-                if (input_idx + CHUNK_SIZE >= 1568) next_state = APPLY_RELU;
+                if (input_idx >= 1568) next_state = APPLY_RELU;
             
             APPLY_RELU: 
                 next_state = NEXT_NEURON;
