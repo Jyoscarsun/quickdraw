@@ -58,9 +58,15 @@ module fc1(
                 end
                 
                 PROCESS_CHUNK: begin
-                    // Process just one input per cycle (more cycles but more reliable)
+                    // Process next input
                     acc <= acc + get_flattened_input(input_idx) * weights[neuron_idx][input_idx];
-                    input_idx <= input_idx + 1;
+                    
+                    // Increment with safety check
+                    if (input_idx >= 1566) begin
+                        input_idx <= 1567;  // Ensure we don't exceed max index
+                    end else begin
+                        input_idx <= input_idx + 1;
+                    end
                 end
                 
                 APPLY_RELU: begin
@@ -91,7 +97,7 @@ module fc1(
                 next_state = PROCESS_CHUNK;
             
             PROCESS_CHUNK: 
-                if (input_idx >= 1568) next_state = APPLY_RELU;
+                if (input_idx >= 1567) next_state = APPLY_RELU;
             
             APPLY_RELU: 
                 next_state = NEXT_NEURON;
